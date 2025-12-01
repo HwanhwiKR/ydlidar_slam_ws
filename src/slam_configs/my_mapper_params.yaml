@@ -18,8 +18,8 @@ slam_toolbox:
     mode: mapping  # localization 로 바꾸면 위치추정 모드
 
     # odom / TF 관련
-    use_odom: false            # 외부 odom 사용 안 함 (휠/IMU 없으니까 false)
-    provide_odom_frame: true   # slam_toolbox가 odom 프레임 생성
+    use_odom: true            # 외부 odom 사용 안 함 (휠/IMU 없으니까 false)
+    provide_odom_frame: false   # slam_toolbox가 odom 프레임 생성
     publish_tf: true           # TF (map<->odom 등) 직접 publish
     transform_publish_period: 0.02  # 50 Hz 로 TF 퍼블리시
 
@@ -45,6 +45,7 @@ slam_toolbox:
 
     # General Parameters
     use_scan_matching: true
+    use_stamped_pose: false
     use_scan_barycenter: true
     minimum_travel_distance: 0.5
     minimum_travel_heading: 0.5
