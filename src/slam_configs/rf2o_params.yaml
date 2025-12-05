@@ -1,0 +1,23 @@
+CLaserOdometry2DNode:
+  ros__parameters:
+    # LiDAR 스캔이 나오는 토픽 이름
+    laser_scan_topic: /scan
+
+    # rf2o가 내보낼 odom 토픽
+    odom_topic: /odom_rf2o
+
+    # odom -> base_link TF를 직접 publish 할지 여부
+    publish_tf: true
+
+    # 로봇 바디 프레임 / 오도메 프레임
+    base_frame_id: base_link
+    odom_frame_id: odom_rf2o
+
+    # 초기 pose를 다른 토픽에서 읽을지 여부 (지금은 안 씀)
+    init_pose_from_topic: ""
+
+    # 계산 주기(Hz)
+    freq: 10.0
+
+    # 디버그 출력
+    verbose: false

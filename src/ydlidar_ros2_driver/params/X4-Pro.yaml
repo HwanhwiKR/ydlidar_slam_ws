@@ -1,7 +1,7 @@
 ydlidar_ros2_driver_node:
   ros__parameters:
     port: /dev/ttyUSB0
-    frame_id: laser_frame
+    frame_id: base_link          # ★ laser_frame → base_link 로 변경
     ignore_array: ""
     baudrate: 128000
     lidar_type: 1
@@ -17,9 +17,9 @@ ydlidar_ros2_driver_node:
     auto_reconnect: true
     support_motor_dtr: false
     angle_max: 180.0
-    angle_min: -180.0
+    angle_min: -180.0 
     range_max: 12.0
-    range_min: 0.1
-    frequency: 10.0
+    range_min: 0.05             # 0.05 로 맞춰도 좋음
+    frequency: 5.0
     invalid_range_is_inf: false
     debug: false
