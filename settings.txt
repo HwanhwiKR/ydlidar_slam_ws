@@ -1,0 +1,60 @@
+
+wsl 환경에서 설정
+
+usbipd attach --wsl --busid 3-2
+source /opt/ros/humble/setup.bash
+source ~/ydlidar_slam_ws/install/setup.bash
+
+echo source /opt/ros/humble/setup.bash >> ~/.bashrc
+echo source ~/ydlidar_slam_ws/install/setup.bash >> ~/.bashrc
+
+-----------------------------------------------------------------------------------------------------------
+
+터미널1 라이다
+
+ros2 run ydlidar_ros2_driver ydlidar_ros2_driver_node \
+  --ros-args \
+  -p port:=/dev/ttyUSB0 \
+  -p frame_id:=laser_frame \
+  -p baudrate:=128000 \
+  -p lidar_type:=1 \
+  -p device_type:=0 \
+  -p isSingleChannel:=true \
+  -p sample_rate:=5 \
+  -p frequency:=5.0 \
+  -p fixed_resolution:=true \
+  -p reversion:=false \
+  -p inverted:=false \
+  -p auto_reconnect:=true \
+  -p support_motor_dtr:=false \
+  -p intensity:=false \
+  -p abnormal_check_count:=4 \
+  -p range_min:=0.05 \
+  -p range_max:=12.0
+
+
+터미널2 tf
+
+ros2 run tf2_ros static_transform_publisher \
+  0 0 0 0 0 0 base_link laser_frame
+
+터미널3 rf2o
+
+ros2 run rf2o_laser_odometry rf2o_laser_odometry_node \
+  --ros-args \
+  -p laser_scan_topic:=/scan \
+  -p odom_topic:=/odom_rf2o \
+  -p base_frame_id:=base_link \
+  -p odom_frame_id:=odom_rf2o \
+  -p publish_tf:=true \
+  -p freq:=10.0
+
+터미널4 slam_toolbox
+
+ros2 launch slam_toolbox online_async_launch.py \
+  slam_params_file:=/home/baehh/ydlidar_slam_ws/src/slam_configs/my_mapper_params.yaml
+
+
+터미널5 rviz2
+
+rivz2
