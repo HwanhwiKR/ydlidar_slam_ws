@@ -24,7 +24,7 @@ ros2 run ydlidar_ros2_driver ydlidar_ros2_driver_node \
   -p frequency:=5.0 \
   -p fixed_resolution:=true \
   -p reversion:=false \
-  -p inverted:=false \
+  -p inverted:=true \
   -p auto_reconnect:=true \
   -p support_motor_dtr:=false \
   -p intensity:=false \
@@ -52,7 +52,7 @@ ros2 run rf2o_laser_odometry rf2o_laser_odometry_node \
 터미널4 slam_toolbox
 
 ros2 launch slam_toolbox online_async_launch.py \
-  slam_params_file:=/home/baehh/ydlidar_slam_ws/src/slam_configs/my_mapper_params.yaml
+  slam_params_file:=/home/baehh/ydlidar_slam_ws/src/slam_configs/slam_toolbox.yaml
 
 
 터미널5 rviz2
