@@ -2,6 +2,11 @@
 set -e
 set -o pipefail
 
+
+# 비대화형 설치 (엔터/질문 스킵)
+export DEBIAN_FRONTEND=noninteractive
+
+
 echo "===== ROS2 Humble Full Setup (Ubuntu 22.04 Jammy) ====="
 
 # --------------------------------------------------
