@@ -1,0 +1,59 @@
+0.
+sudo apt update
+sudo apt install -y lsb-release
+
+1. 
+lsb_release -a
+uname -m
+(aarch64)
+
+2.
+sudo apt update
+sudo apt upgrade -y
+
+sudo apt install -y git curl wget build-essential cmake pkg-config \
+  python3-pip python3-venv python3-rosdep \
+  python3-colcon-common-extensions
+
+3.locale 설정
+locale
+sudo apt update
+sudo apt install -y locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+locale
+
+4.universe 저장소 활성화
+sudo apt install -y software-properties-common
+sudo add-apt-repository universe
+
+5. ros2 저장소 추가
+sudo apt update
+sudo apt install -y curl gnupg lsb-release
+
+sudo mkdir -p /etc/apt/keyrings
+curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/ros-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-archive-keyring.gpg] \
+http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" \
+| sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+6. 시스템 업그레이드
+sudo apt update
+sudo apt upgrade -y
+
+7. ros2 humble
+sudo apt install -y ros-humble-desktop
+
+8. 개발도구
+sudo apt install -y ros-dev-tools
+
+9. ros2 환경설정
+source /opt/ros/humble/setup.bash
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+
+10.rosdep 초기화
+sudo rosdep init
+rosdep update
