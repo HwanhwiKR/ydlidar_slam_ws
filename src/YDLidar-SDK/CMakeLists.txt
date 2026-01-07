@@ -171,4 +171,50 @@ install(FILES LICENSE.txt README.md
   DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_PKG_NAME})
 
 install(DIRECTORY doc
-  DESTINATION $
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_PKG_NAME})
+
+if(NOT WIN32)
+  install(PROGRAMS startup/initenv.sh DESTINATION startup)
+endif()
+
+include_directories(${CMAKE_BINARY_DIR})
+
+##################################################################################
+# uninstall target (충돌 방지)
+if(NOT TARGET uninstall)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    @ONLY
+  )
+  add_custom_target(uninstall
+    COMMAND "${CMAKE_COMMAND}"
+    -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  )
+endif()
+
+##################################################################################
+# packaging
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME}-${YDLIDAR_SDK_VERSION})
+set(CPACK_PACKAGE_VERSION ${YDLIDAR_SDK_VERSION})
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS OFF)
+set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "YDLIDAR SDK.")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tony Yang")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${YDLIDAR_SDK_VERSION}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${YDLIDAR_SDK_VERSION}")
+set(CPACK_SOURCE_GENERATOR "ZIP;TBZ2")
+set(CPACK_SET_DESTDIR true)
+set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
+
+if("${CMAKE_SYSTEM}" MATCHES "Linux")
+  set(CPACK_GENERATOR "TBZ2")
+else()
+  set(CPACK_GENERATOR "ZIP")
+endif()
+
+include(CPack)
+
+# Summary
+include(cmake/script_show_final_summary.cmake REQUIRED)
