@@ -52,9 +52,9 @@ ros2 run rf2o_laser_odometry rf2o_laser_odometry_node \
 터미널4 slam_toolbox
 
 ros2 launch slam_toolbox online_async_launch.py \
-  slam_params_file:=/home/baehh/ydlidar_slam_ws/src/slam_configs/slam_toolbox.yaml
+  slam_params_file:=/home/bhh/ydlidar_slam_ws/src/slam_configs/slam_toolbox.yaml
 
 
 터미널5 rviz2
 
-rivz2
+rviz2

@@ -57,3 +57,24 @@ echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 10.rosdep 초기화
 sudo rosdep init
 rosdep update
+
+11.rosdep install
+cd ~/ydlidar_slam_ws
+rosdep install --from-paths src --ignore-src -r -y
+
+12. eigen
+sudo apt install -y libeigen3-dev
+
+13.openmp
+sudo apt install -y libomp-dev
+
+14.tf2
+sudo apt install -y \
+	ros-humble-tf2 \
+	ros-humble-tf2-ros \
+	ros-humble-tf2-geometry-msgs
+	
+15. build
+cd ~/ydlidar_slam_ws
+colcon build --symlink-install --parallel-workers $(nproc) --event-handlers console_direct+
+	
