@@ -7,10 +7,10 @@ set(YDLIDAR_SDK_VERSION_MAJOR 1)
 set(YDLIDAR_SDK_VERSION_MINOR 2)
 set(YDLIDAR_SDK_VERSION_PATCH 19)
 set(YDLIDAR_SDK_VERSION
-    ${YDLIDAR_SDK_VERSION_MAJOR}.${YDLIDAR_SDK_VERSION_MINOR}.${YDLIDAR_SDK_VERSION_PATCH})
+  ${YDLIDAR_SDK_VERSION_MAJOR}.${YDLIDAR_SDK_VERSION_MINOR}.${YDLIDAR_SDK_VERSION_PATCH})
 
 ##########################################################
-# Detect wordsize:
+# Detect wordsize
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(CMAKE_MRPT_WORD_SIZE 64)
 else()
@@ -18,7 +18,7 @@ else()
 endif()
 
 ##################################################
-# Add c++11 Flag
+# C++11
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 ##########################################################
@@ -27,7 +27,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   add_compile_options(-fPIC)
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
   message(STATUS "Current platform: Windows")
-  message(STATUS "Current compiler: ${CMAKE_CXX_COMPILER_ID}")
   if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     add_compile_options("/utf-8")
     add_definitions(-DWIN32_LEAN_AND_MEAN -DNOMINMAX)
@@ -35,18 +34,18 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 
 #####################################################
-# add cmake module path
+# cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(SDK_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 #############################################################################
-# include cmake file
+# include cmake files
 include(common/ydlidar_base)
 include(install_package)
 
 #############################################################################
-# cmake policies
+# policies
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
   cmake_policy(SET CMP0005 NEW)
@@ -69,18 +68,18 @@ option(BUILD_CSHARP "Build CSharp." OFF)
 option(BUILD_TEST "Build Test." OFF)
 
 ############################################################################
-# find package
+# find packages
 find_package(SWIG)
 find_package(PythonInterp)
 find_package(PythonLibs)
 find_package(GTest)
 
 ############################################################################
-# include headers
+# include headers (소스 단계)
 include_directories(. core src)
 
 #############################################################################
-# add subdirectory
+# subdirectories
 add_subdirectory(core)
 add_subdirectory(src)
 
@@ -94,7 +93,7 @@ include(common/ydlidar_parse)
 include_directories(${SDK_INCS} ${CMAKE_CURRENT_BINARY_DIR})
 
 ########################################################
-# generate config header
+# generate config header  ★★★ 핵심 ★★★
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/ydlidar_config.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/ydlidar_config.h"
@@ -115,8 +114,12 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME} ${SDK_LIBS})
+
+# ★★★ 핵심 수정: binary dir를 PUBLIC include로 노출 ★★★
 target_include_directories(${PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src)
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 ############################################################################
 # enable test
@@ -168,51 +171,4 @@ install(FILES LICENSE.txt README.md
   DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_PKG_NAME})
 
 install(DIRECTORY doc
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_PKG_NAME})
-
-if(NOT WIN32)
-  install(PROGRAMS startup/initenv.sh DESTINATION startup)
-endif()
-
-include_directories(${CMAKE_BINARY_DIR})
-
-##################################################################################
-# uninstall target (★★ 핵심 수정 부분 ★★)
-# 이미 uninstall 타겟이 있으면 만들지 않음 (ROS / colcon 호환)
-if(NOT TARGET uninstall)
-  configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    @ONLY
-  )
-  add_custom_target(uninstall
-    COMMAND "${CMAKE_COMMAND}"
-    -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-  )
-endif()
-
-##################################################################################
-# packaging
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME}-${YDLIDAR_SDK_VERSION})
-set(CPACK_PACKAGE_VERSION ${YDLIDAR_SDK_VERSION})
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS OFF)
-set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
-set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "YDLIDAR SDK.")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tony Yang")
-set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${YDLIDAR_SDK_VERSION}")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${YDLIDAR_SDK_VERSION}")
-set(CPACK_SOURCE_GENERATOR "ZIP;TBZ2")
-set(CPACK_SET_DESTDIR true)
-set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-
-if("${CMAKE_SYSTEM}" MATCHES "Linux")
-  set(CPACK_GENERATOR "TBZ2")
-else()
-  set(CPACK_GENERATOR "ZIP")
-endif()
-
-include(CPack)
-
-# Summary
-include(cmake/script_show_final_summary.cmake REQUIRED)
+  DESTINATION $
