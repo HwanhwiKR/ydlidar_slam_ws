@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "===== ROS2 Humble Setup (Ubuntu 22.04 Jammy) ====="
 
@@ -85,6 +86,9 @@ sudo apt install -y \
   ros-humble-tf2-ros \
   ros-humble-tf2-geometry-msgs
 
+# --------------------------------------------------
+# 완료
+# --------------------------------------------------
 echo "===== ✅ ROS2 Humble 기본 설치 완료 ====="
 echo "새 터미널을 열거나 다음 명령 실행:"
 echo "source ~/.bashrc"
