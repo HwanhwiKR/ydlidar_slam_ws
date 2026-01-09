@@ -2,17 +2,24 @@
 set -e
 set -o pipefail
 
-
-# 비대화형 설치 (엔터/질문 스킵)
+# ==================================================
+# 완전 비대화형 설치 환경 (ENTER / 질문 / pager 차단)
+# ==================================================
 export DEBIAN_FRONTEND=noninteractive
+export APT_LISTCHANGES_FRONTEND=none
+export PAGER=cat
+export TERM=dumb
 
+APT_OPTS="-y \
+  -o Dpkg::Options::=--force-confdef \
+  -o Dpkg::Options::=--force-confold"
 
 echo "===== ROS2 Humble Full Setup (Ubuntu 22.04 Jammy) ====="
 
 # --------------------------------------------------
-# 0. apt lock / 자동 업데이트 처리
+# 0. apt lock / 자동 업데이트 완전 차단
 # --------------------------------------------------
-echo ">> Stopping auto apt services (if any)"
+echo ">> Stopping auto apt services"
 sudo systemctl stop unattended-upgrades || true
 sudo systemctl stop apt-daily.service || true
 sudo systemctl stop apt-daily-upgrade.service || true
@@ -29,8 +36,8 @@ wait_for_apt
 # 1. 기본 정보
 # --------------------------------------------------
 echo ">> System info"
-sudo apt update
-sudo apt install -y lsb-release
+sudo apt-get update
+sudo apt-get install $APT_OPTS lsb-release
 lsb_release -a
 uname -m
 
@@ -38,15 +45,15 @@ uname -m
 # 2. 기본 빌드 / Python 환경
 # --------------------------------------------------
 echo ">> Base build & python"
-sudo apt install -y \
+sudo apt-get install $APT_OPTS \
   git curl wget build-essential cmake pkg-config \
   python3-pip python3-venv
 
 # --------------------------------------------------
-# 3. locale 설정
+# 3. locale 설정 (ENTER 요구 원천 차단)
 # --------------------------------------------------
 echo ">> Locale setup"
-sudo apt install -y locales
+sudo apt-get install $APT_OPTS locales
 sudo locale-gen en_US en_US.UTF-8
 sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -55,15 +62,15 @@ export LANG=en_US.UTF-8
 # 4. universe 저장소
 # --------------------------------------------------
 echo ">> Enable universe repository"
-sudo apt install -y software-properties-common
-sudo add-apt-repository universe
-sudo apt update
+sudo apt-get install $APT_OPTS software-properties-common
+sudo add-apt-repository -y universe
+sudo apt-get update
 
 # --------------------------------------------------
 # 5. ROS2 저장소 추가 (Jammy 고정)
 # --------------------------------------------------
 echo ">> Add ROS2 repository"
-sudo apt install -y curl gnupg lsb-release
+sudo apt-get install $APT_OPTS curl gnupg lsb-release
 sudo mkdir -p /etc/apt/keyrings
 
 curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
@@ -74,19 +81,19 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-arc
 http://packages.ros.org/ros2/ubuntu jammy main" \
 | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-sudo apt update
+sudo apt-get update
 
 # --------------------------------------------------
-# 6. ROS2 Humble 설치
+# 6. ROS2 Humble 설치 (ENTER 가장 많이 뜨는 구간)
 # --------------------------------------------------
 echo ">> Install ROS2 Humble Desktop"
-sudo apt install -y ros-humble-desktop
+sudo apt-get install $APT_OPTS ros-humble-desktop
 
 # --------------------------------------------------
 # 7. ROS 개발 도구 (Jammy 정답)
 # --------------------------------------------------
 echo ">> Install ROS dev tools (colcon, rosdep)"
-sudo apt install -y \
+sudo apt-get install $APT_OPTS \
   python3-rosdep2 \
   ros-dev-tools
 
@@ -110,9 +117,9 @@ rosdep update
 # 10. 추가 라이브러리 (ydlidar / rf2o / slam)
 # --------------------------------------------------
 echo ">> Extra libraries"
-sudo apt install -y libeigen3-dev libomp-dev
+sudo apt-get install $APT_OPTS libeigen3-dev libomp-dev
 
-sudo apt install -y \
+sudo apt-get install $APT_OPTS \
   ros-humble-tf2 \
   ros-humble-tf2-ros \
   ros-humble-tf2-geometry-msgs
