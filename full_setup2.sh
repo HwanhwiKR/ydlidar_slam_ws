@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# ---- apt 상태 복구 ----
+sudo dpkg --configure -a || true
+sudo apt --fix-broken install -y || true
+
 echo "===== ROS2 Humble Setup (Ubuntu 22.04 Jammy) ====="
 
 # --------------------------------------------------
