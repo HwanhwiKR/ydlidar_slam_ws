@@ -63,7 +63,7 @@ endif()
 #############################################################################
 # options
 option(BUILD_SHARED_LIBS "Build shared libraries." OFF)
-option(BUILD_EXAMPLES "Build Example." ON)
+option(BUILD_EXAMPLES "Build Example." OFF)
 option(BUILD_CSHARP "Build CSharp." OFF)
 option(BUILD_TEST "Build Test." OFF)
 
@@ -83,9 +83,7 @@ include_directories(. core src)
 add_subdirectory(core)
 add_subdirectory(src)
 
-if(BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif()
+# examples are disabled for ROS2 / low-RAM environment
 
 #############################################################################
 # parse libraries
