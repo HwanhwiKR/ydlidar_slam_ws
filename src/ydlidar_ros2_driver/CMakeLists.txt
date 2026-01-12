@@ -1,6 +1,6 @@
 # Copyright(c) 2020 eaibot limited.
 cmake_minimum_required(VERSION 3.5)
-project(ydlidar_ros2_driver C CXX)
+project(ydlidar_ros2_driver LANGUAGES C CXX)
 
 ################## C++ 표준 설정 ##################
 if(NOT CMAKE_CXX_STANDARD)
@@ -20,8 +20,8 @@ find_package(visualization_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 
-################## YDLIDAR SDK (소스 포함 방식) ##################
-# src/YDLidar-SDK 를 내부 라이브러리로 직접 포함
+################## YDLIDAR SDK ##################
+# SDK를 내부 서브디렉토리 라이브러리로 포함
 add_subdirectory(
   ${CMAKE_CURRENT_SOURCE_DIR}/../YDLidar-SDK
   ydlidar_sdk_build
@@ -40,14 +40,15 @@ ament_target_dependencies(${PROJECT_NAME}_node
   std_srvs
 )
 
-# SDK 라이브러리 직접 링크 (변수 ❌, 타겟 ✅)
+# SDK 라이브러리 링크
 target_link_libraries(${PROJECT_NAME}_node
   ydlidar_sdk
 )
 
+# ❗ 핵심 수정 포인트
+# SDK가 export하는 include 디렉토리를 타겟에 연결
 target_include_directories(${PROJECT_NAME}_node PRIVATE
-  ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/include
 )
 
 ################## Client 실행 파일 ##################
@@ -68,8 +69,7 @@ target_link_libraries(${PROJECT_NAME}_client
 )
 
 target_include_directories(${PROJECT_NAME}_client PRIVATE
-  ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/include
 )
 
 ################## Install ##################

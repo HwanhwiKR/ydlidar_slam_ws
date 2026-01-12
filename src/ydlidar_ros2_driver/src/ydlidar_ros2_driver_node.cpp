@@ -13,7 +13,7 @@
 #endif
 #endif
 
-#include "src/CYdLidar.h"
+#include "CYdLidar.h"
 #include <math.h>
 #include <chrono>
 #include <iostream>
