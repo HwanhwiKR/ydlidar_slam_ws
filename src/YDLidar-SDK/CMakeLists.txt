@@ -116,6 +116,7 @@ target_link_libraries(${PROJECT_NAME} ${SDK_LIBS})
 # ★★★ 핵심 수정: binary dir를 PUBLIC include로 노출 ★★★
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
