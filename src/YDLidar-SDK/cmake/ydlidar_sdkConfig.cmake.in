@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/ydlidar_sdkTargets.cmake")
+
+set(ydlidar_sdk_LIBRARIES ydlidar::ydlidar_sdk)

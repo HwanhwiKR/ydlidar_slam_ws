@@ -2,9 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 project(ydlidar_ros2_driver LANGUAGES C CXX)
 
 ################## C++ 표준 ##################
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -19,7 +18,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 
 ################## YDLIDAR SDK ##################
-# 🔥 핵심: SDK는 외부 패키지로 찾는다
+# 🔥 반드시 외부 패키지로 찾는다
 find_package(ydlidar_sdk REQUIRED)
 
 ################## Node ##################
@@ -36,7 +35,7 @@ ament_target_dependencies(${PROJECT_NAME}_node
 )
 
 target_link_libraries(${PROJECT_NAME}_node
-  ydlidar_sdk
+  ydlidar::ydlidar_sdk
 )
 
 ################## Client ##################
@@ -53,7 +52,7 @@ ament_target_dependencies(${PROJECT_NAME}_client
 )
 
 target_link_libraries(${PROJECT_NAME}_client
-  ydlidar_sdk
+  ydlidar::ydlidar_sdk
 )
 
 ################## Install ##################
