@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== [02] ROS 2 Humble setup ==="
+echo -e "\n[START][02] ROS 2 Humble setup\n"
 
 sudo apt install -y curl gnupg lsb-release
 
@@ -23,3 +23,5 @@ sudo apt install -y ros-humble-desktop ros-dev-tools
 if ! grep -q "/opt/ros/humble/setup.bash" ~/.bashrc; then
   echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 fi
+
+echo -e "\n[DONE ][02] ROS 2 Humble setup completed ✅\n"
