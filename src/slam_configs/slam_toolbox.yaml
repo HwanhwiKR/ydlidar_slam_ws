@@ -1,5 +1,9 @@
 slam_toolbox:
   ros__parameters:
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
     use_sim_time: false
 
     # 반드시 mapping
@@ -7,13 +11,13 @@ slam_toolbox:
 
     # Frames
     map_frame: map
-    odom_frame: odom_rf2o
-    base_frame: base_link
+    odom_frame: odom
+    base_frame: base_footprint
     tracking_frame: base_link
 
     # Topics
     scan_topic: /scan
-    odom_topic: /odom_rf2o   # 🔥 이게 빠져 있었음 (핵심)
+    odom_topic: /odom  # 🔥 이게 빠져 있었음 (핵심)
     use_odom: true
 
     # IMU 반드시 사용
@@ -28,14 +32,14 @@ slam_toolbox:
     # SLAM 시작 조건 완화
     minimum_travel_distance: 0.0
     minimum_travel_heading: 0.0
-    minimum_time_interval: 0.0
+    minimum_time_interval: 0.1
 
     throttle_scans: 1
     map_update_interval: 0.5
 
     resolution: 0.05
     min_laser_range: 0.05
-    max_laser_range: 12.0
+    max_laser_range: 8.0
 
     use_scan_matching: true
     do_loop_closing: false
