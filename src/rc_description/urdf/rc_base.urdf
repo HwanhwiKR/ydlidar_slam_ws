@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot name="rc_car">
+
+  <!-- ========================= -->
+  <!-- Base Link (20cm Cube) -->
+  <!-- ========================= -->
+  <link name="base_link">
+    <visual>
+      <!-- 중심을 지면 위 10cm로 -->
+      <origin xyz="0 0 0.10" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.20 0.20 0.20"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.2 0.2 0.8 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.10" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.20 0.20 0.20"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0.10"/>
+      <mass value="1.0"/>
+      <inertia
+        ixx="0.01" ixy="0.0" ixz="0.0"
+        iyy="0.01" iyz="0.0"
+        izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- ========================= -->
+  <!-- Laser Frame -->
+  <!-- ========================= -->
+  <link name="laser_frame"/>
+
+  <!-- ========================= -->
+  <!-- Fixed Joint: Base → Laser -->
+  <!-- ========================= -->
+  <joint name="base_to_laser" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser_frame"/>
+
+    <!-- 라이다 위치 (임시값) -->
+    <!-- 실제 장착 위치에 맞게 조정 가능 -->
+    <origin xyz="0 0 0.15" rpy="0 0 0"/>
+  </joint>
+
+</robot>
