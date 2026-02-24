@@ -2,21 +2,35 @@
 <robot name="rc_car">
 
   <!-- ========================= -->
-  <!-- Base Link (실제 차체 크기) -->
+  <!-- Base Link (앞부분 라운드) -->
   <!-- ========================= -->
   <link name="base_link">
+
+    <!-- ===== 뒤쪽 차체 (box) ===== -->
     <visual>
-      <!-- 중심을 지면 위 8.5cm -->
-      <origin xyz="0 0 0.085" rpy="0 0 0"/>
+      <!-- 약간 뒤로 이동 -->
+      <origin xyz="-0.03 0 0.085" rpy="0 0 0"/>
       <geometry>
-        <!-- 길이(X) 0.255, 가로(Y) 0.15, 높이(Z) 0.17 -->
-        <box size="0.255 0.15 0.17"/>
+        <!-- 길이 줄여서 앞쪽 공간 확보 -->
+        <box size="0.20 0.15 0.17"/>
       </geometry>
       <material name="blue">
         <color rgba="0.2 0.2 0.8 1.0"/>
       </material>
     </visual>
 
+    <!-- ===== 앞쪽 라운드 (cylinder) ===== -->
+    <visual>
+      <!-- 앞으로 이동 -->
+      <origin xyz="0.095 0 0.085" rpy="0 1.5708 0"/>
+      <geometry>
+        <!-- 반원처럼 보이게 -->
+        <cylinder radius="0.075" length="0.17"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <!-- ===== Collision (단순 유지) ===== -->
     <collision>
       <origin xyz="0 0 0.085" rpy="0 0 0"/>
       <geometry>
@@ -24,6 +38,7 @@
       </geometry>
     </collision>
 
+    <!-- ===== Inertial ===== -->
     <inertial>
       <origin xyz="0 0 0.085"/>
       <mass value="1.0"/>
@@ -32,6 +47,7 @@
         iyy="0.01" iyz="0.0"
         izz="0.01"/>
     </inertial>
+
   </link>
 
   <!-- ========================= -->
@@ -45,9 +61,6 @@
   <joint name="base_to_laser" type="fixed">
     <parent link="base_link"/>
     <child link="laser_frame"/>
-
-    <!-- 라이다 실제 높이 10.5cm -->
-    <!-- base 중심(8.5cm) 기준 +2cm -->
     <origin xyz="0 0 0.02" rpy="0 0 0"/>
   </joint>
 
