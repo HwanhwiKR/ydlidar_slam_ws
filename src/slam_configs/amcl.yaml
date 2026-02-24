@@ -2,26 +2,59 @@ amcl:
   ros__parameters:
     use_sim_time: false
 
+    # Topics
     scan_topic: scan
 
+    # Frames
     base_frame_id: base_link
     odom_frame_id: odom
     global_frame_id: map
 
-    set_initial_pose: true
+    # 항상 다른 위치에서 시작
+    set_initial_pose: false
 
-    min_particles: 500
-    max_particles: 2000
+    # 🔥 대형 공간용 파티클 증가
+    min_particles: 1000
+    max_particles: 4000
 
-    update_min_d: 0.05
-    update_min_a: 0.05
+    # 리샘플링
+    resample_interval: 1
 
+    # 이동 최소 기준 (너무 낮으면 CPU 폭발)
+    update_min_d: 0.1
+    update_min_a: 0.1
+
+    # 레이저 모델
     laser_model_type: likelihood_field
-    laser_likelihood_max_dist: 2.0
+    laser_likelihood_max_dist: 3.0
 
-    max_beams: 60
+    # 🔥 빔 증가 (정밀도 향상)
+    max_beams: 100
 
-    z_hit: 0.95
-    z_rand: 0.05
+    # 센서 가중치
+    z_hit: 0.9
+    z_rand: 0.1
 
     sigma_hit: 0.2
+
+    # EKF 기반이라 motion noise 낮게
+    alpha1: 0.15
+    alpha2: 0.15
+    alpha3: 0.2
+    alpha4: 0.2
+    alpha5: 0.1
+
+    # Beam skip (대형 공간 반사 대비)
+    do_beamskip: true
+    beam_skip_distance: 0.5
+    beam_skip_threshold: 0.3
+    beam_skip_error_threshold: 0.9
+
+    # TF 허용
+    transform_tolerance: 0.7
+
+    # Recovery (대형 공간에서 약간 필요)
+    recovery_alpha_slow: 0.001
+    recovery_alpha_fast: 0.1
+
+    tf_broadcast: true
